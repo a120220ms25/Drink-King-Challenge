@@ -813,7 +813,7 @@
                 <div class="options-grid" id="optionsGrid"></div>
             </div>
 
-            <button class="vc-btn vc-btn-success" onclick="submitAnswer()" style="width: 100%;">
+            <button class="vc-btn vc-btn-secondary" onclick="submitAnswer()" style="width: 100%;">
                 ✅ 提交答案
             </button>
         </div>
@@ -866,8 +866,8 @@
         <div class="screen" id="answerReviewScreen">
             <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">📝 答案檢視</h2>
             <div id="answerReviewContainer" style="max-height: 500px; overflow-y: auto;"></div>
-            <button class="vc-btn" onclick="showScreen('resultScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
-                ← 返回結果
+            <button class="vc-btn" onclick="goBack()" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回
             </button>
         </div>
 
@@ -875,8 +875,8 @@
         <div class="screen" id="achievementsScreen">
             <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">🏅 成就系統</h2>
             <div class="achievements-grid" id="achievementsGrid"></div>
-            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
-                ← 返回首頁
+            <button class="vc-btn" onclick="goBack()" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回
             </button>
         </div>
 
@@ -884,8 +884,8 @@
         <div class="screen" id="historyScreen">
             <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">📊 歷史記錄</h2>
             <div class="history-list" id="historyList"></div>
-            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
-                ← 返回首頁
+            <button class="vc-btn" onclick="goBack()" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回
             </button>
         </div>
 
@@ -903,8 +903,8 @@
                 </thead>
                 <tbody id="leaderboardBody"></tbody>
             </table>
-            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
-                ← 返回首頁
+            <button class="vc-btn" onclick="goBack()" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回
             </button>
         </div>
     </div>
@@ -970,7 +970,16 @@
         }
 
         // ==================== 畫面切換 ====================
+        let previousScreen = 'startScreen'; // 記錄上一個畫面
+
         function showScreen(screenId) {
+            const currentScreen = document.querySelector('.screen.active')?.id || 'startScreen';
+
+            // 只在非特殊頁面時記錄為 previous
+            if (!['achievementsScreen', 'historyScreen', 'leaderboardScreen', 'answerReviewScreen'].includes(currentScreen)) {
+                previousScreen = currentScreen;
+            }
+
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
 
@@ -978,6 +987,10 @@
             if (screenId === 'historyScreen') updateHistoryDisplay();
             if (screenId === 'leaderboardScreen') updateLeaderboard();
             if (screenId === 'answerReviewScreen') updateAnswerReview();
+        }
+
+        function goBack() {
+            showScreen(previousScreen);
         }
 
         // ==================== 題目隨機化 ====================
