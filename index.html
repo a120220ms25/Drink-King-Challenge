@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飲料王挑戰 👑 | VibeCoding Games</title>
+    <style>
+        /* ==================== VibeCoding 設計系統 ==================== */
+        :root {
+            /* 品牌色系 */
+            --vc-primary: #667eea;
+            --vc-primary-dark: #5568d3;
+            --vc-secondary: #764ba2;
+            --vc-accent: #f093fb;
+            --vc-success: #00b894;
+            --vc-warning: #fdcb6e;
+            --vc-danger: #ff7675;
+
+            /* 中性色 */
+            --vc-bg: #f8f9fa;
+            --vc-surface: #ffffff;
+            --vc-text: #2d3436;
+            --vc-text-light: #636e72;
+            --vc-border: #dfe6e9;
+
+            /* 間距系統 */
+            --vc-space-xs: 4px;
+            --vc-space-sm: 8px;
+            --vc-space-md: 16px;
+            --vc-space-lg: 24px;
+            --vc-space-xl: 32px;
+            --vc-space-2xl: 48px;
+
+            /* 圓角系統 */
+            --vc-radius-sm: 8px;
+            --vc-radius-md: 12px;
+            --vc-radius-lg: 16px;
+            --vc-radius-xl: 24px;
+            --vc-radius-full: 9999px;
+
+            /* 陰影系統 */
+            --vc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --vc-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --vc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+
+            /* 動畫 */
+            --vc-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, var(--vc-primary) 0%, var(--vc-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--vc-space-lg);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* VibeCoding 品牌標誌 */
+        .vc-brand {
+            position: absolute;
+            top: var(--vc-space-md);
+            left: var(--vc-space-md);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 100;
+        }
+
+        /* 遊戲容器 - VibeCoding 卡片風格 */
+        .vc-game-card {
+            background: var(--vc-surface);
+            border-radius: var(--vc-radius-xl);
+            padding: var(--vc-space-xl);
+            max-width: 700px;
+            width: 100%;
+            box-shadow: var(--vc-shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 標題 - VibeCoding 風格 */
+        .vc-title {
+            text-align: center;
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--vc-space-lg);
+            letter-spacing: -0.5px;
+        }
+
+        /* VibeCoding 按鈕系統 */
+        .vc-btn {
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            color: white;
+            border: none;
+            padding: var(--vc-space-md) var(--vc-space-xl);
+            border-radius: var(--vc-radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--vc-transition);
+            box-shadow: var(--vc-shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--vc-shadow-md);
+        }
+
+        .vc-btn:active {
+            transform: translateY(0);
+        }
+
+        .vc-btn-secondary {
+            background: var(--vc-text-light);
+        }
+
+        .vc-btn-success {
+            background: var(--vc-success);
+        }
+
+        /* VibeCoding 卡片 */
+        .vc-card {
+            background: var(--vc-bg);
+            border-radius: var(--vc-radius-md);
+            padding: var(--vc-space-lg);
+            border: 2px solid var(--vc-border);
+            transition: var(--vc-transition);
+        }
+
+        /* 音效控制 */
+        .vc-sound-toggle {
+            position: absolute;
+            top: var(--vc-space-md);
+            right: var(--vc-space-md);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--vc-radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--vc-transition);
+            font-size: 1.2rem;
+        }
+
+        .vc-sound-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 煙火容器 */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        /* 成就通知 */
+        .achievement-notification {
+            position: fixed;
+            top: var(--vc-space-lg);
+            right: var(--vc-space-lg);
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: var(--vc-space-md) var(--vc-space-lg);
+            border-radius: var(--vc-radius-md);
+            box-shadow: var(--vc-shadow-lg);
+            z-index: 2000;
+            animation: slideIn 0.5s ease-out;
+            font-weight: 600;
+            max-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 響應式 */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 遊戲特定樣式 */
+        .welcome-badge {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: var(--vc-space-lg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--vc-space-md);
+            margin-bottom: var(--vc-space-lg);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: var(--vc-space-md);
+            background: var(--vc-bg);
+            border-radius: var(--vc-radius-md);
+            border: 2px solid var(--vc-border);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--vc-text-light);
+            margin-top: var(--vc-space-xs);
+        }
+
+        .question-card {
+            background: var(--vc-bg);
+            padding: var(--vc-space-lg);
+            border-radius: var(--vc-radius-md);
+            margin-bottom: var(--vc-space-lg);
+            border: 2px solid var(--vc-border);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--vc-space-md);
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: var(--vc-primary);
+        }
+
+        .question-type-badge {
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            color: white;
+            padding: var(--vc-space-xs) var(--vc-space-md);
+            border-radius: var(--vc-radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--vc-text);
+            margin-bottom: var(--vc-space-lg);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: var(--vc-space-sm);
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid var(--vc-border);
+            padding: var(--vc-space-md);
+            border-radius: var(--vc-radius-md);
+            text-align: left;
+            cursor: pointer;
+            transition: var(--vc-transition);
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            border-color: var(--vc-primary);
+            background: #f0f3ff;
+            transform: translateX(4px);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        .feedback-card {
+            padding: var(--vc-space-md);
+            border-radius: var(--vc-radius-md);
+            margin-bottom: var(--vc-space-md);
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .feedback-card.show {
+            display: block;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .feedback-card.correct {
+            background: linear-gradient(135deg, #d4edda, #b8e6c1);
+            color: #155724;
+        }
+
+        .feedback-card.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #ffb3ba);
+            color: #721c24;
+        }
+
+        /* 成就系統 */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--vc-space-md);
+            margin: var(--vc-space-lg) 0;
+        }
+
+        .achievement-item {
+            background: var(--vc-bg);
+            padding: var(--vc-space-md);
+            border-radius: var(--vc-radius-md);
+            border: 2px solid var(--vc-border);
+            text-align: center;
+            transition: var(--vc-transition);
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-color: #ffd700;
+            transform: scale(1.02);
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--vc-space-sm);
+        }
+
+        .achievement-name {
+            font-weight: 700;
+            margin-bottom: var(--vc-space-xs);
+        }
+
+        .achievement-desc {
+            font-size: 0.85rem;
+            color: var(--vc-text-light);
+        }
+
+
+        /* 歷史記錄 */
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: var(--vc-bg);
+            padding: var(--vc-space-md);
+            border-radius: var(--vc-radius-md);
+            margin-bottom: var(--vc-space-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item.best {
+            border: 2px solid #ffd700;
+            background: linear-gradient(135deg, #fff9e6, #fffbf0);
+        }
+
+        /* 按鈕組 */
+        .btn-group {
+            display: flex;
+            gap: var(--vc-space-sm);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: var(--vc-space-lg);
+        }
+
+        /* 輸入框 */
+        .vc-input {
+            width: 100%;
+            max-width: 400px;
+            padding: var(--vc-space-md);
+            border: 2px solid var(--vc-border);
+            border-radius: var(--vc-radius-full);
+            font-size: 1rem;
+            text-align: center;
+            transition: var(--vc-transition);
+            margin: var(--vc-space-md) auto;
+            display: block;
+        }
+
+        .vc-input:focus {
+            outline: none;
+            border-color: var(--vc-primary);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 標籤 */
+        .vc-label {
+            display: block;
+            text-align: center;
+            color: var(--vc-text-light);
+            margin-bottom: var(--vc-space-sm);
+            font-weight: 600;
+        }
+
+        /* 排行榜 */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--vc-space-lg) 0;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            color: white;
+            padding: var(--vc-space-md);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .leaderboard-table th:first-child {
+            border-radius: var(--vc-radius-md) 0 0 0;
+        }
+
+        .leaderboard-table th:last-child {
+            border-radius: 0 var(--vc-radius-md) 0 0;
+        }
+
+        .leaderboard-table td {
+            padding: var(--vc-space-md);
+            border-bottom: 1px solid var(--vc-border);
+        }
+
+        .leaderboard-table tr:hover {
+            background: var(--vc-bg);
+        }
+
+        .rank-1 { color: #ffd700; font-weight: 700; font-size: 1.2rem; }
+        .rank-2 { color: #c0c0c0; font-weight: 700; font-size: 1.1rem; }
+        .rank-3 { color: #cd7f32; font-weight: 700; }
+
+        /* 答案檢視 */
+        .answer-review-item {
+            background: var(--vc-bg);
+            padding: var(--vc-space-md);
+            border-radius: var(--vc-radius-md);
+            margin-bottom: var(--vc-space-md);
+            border-left: 4px solid var(--vc-border);
+        }
+
+        .answer-review-item.correct {
+            border-left-color: var(--vc-success);
+            background: #e8f5e9;
+        }
+
+        .answer-review-item.incorrect {
+            border-left-color: var(--vc-danger);
+            background: #ffebee;
+        }
+
+        @media (max-width: 768px) {
+            .vc-game-card {
+                padding: var(--vc-space-lg);
+            }
+
+            .vc-title {
+                font-size: 2rem;
+            }
+
+            .game-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--vc-space-sm);
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 滾動條美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--vc-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--vc-primary);
+            border-radius: var(--vc-radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--vc-primary-dark);
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: var(--vc-space-sm) 0;
+            padding-left: var(--vc-space-lg);
+            position: relative;
+        }
+
+        .info-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--vc-primary);
+            font-weight: 700;
+        }
+
+        .title-description-card {
+            background: linear-gradient(135deg, #fff9e6, #fffbf0);
+            padding: var(--vc-space-lg);
+            border-radius: var(--vc-radius-md);
+            border-left: 4px solid #ffd700;
+            margin: var(--vc-space-lg) 0;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .final-score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: var(--vc-space-lg) 0;
+        }
+
+        .celebration-emoji {
+            text-align: center;
+            font-size: 3rem;
+            margin: var(--vc-space-md) 0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* IG 預覽頁面 */
+        .ig-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: var(--vc-space-lg);
+        }
+
+        .ig-preview-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .ig-preview-container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .ig-preview-image {
+            width: 100%;
+            max-height: 80vh;
+            border-radius: var(--vc-radius-lg);
+            box-shadow: var(--vc-shadow-lg);
+            margin-bottom: var(--vc-space-lg);
+        }
+
+        .ig-preview-buttons {
+            display: flex;
+            gap: var(--vc-space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ig-close-btn {
+            position: absolute;
+            top: var(--vc-space-lg);
+            right: var(--vc-space-lg);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: var(--vc-radius-full);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--vc-transition);
+        }
+
+        .ig-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .ig-preview-container {
+                max-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- VibeCoding 品牌 -->
+    <div class="vc-brand">VIBECODING GAMES</div>
+
+    <!-- 音效控制 -->
+    <div class="vc-sound-toggle" onclick="toggleSound()" id="soundToggle" title="音效控制">
+        🔊
+    </div>
+
+    <!-- 煙火容器 -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <!-- IG 圖片預覽 -->
+    <div class="ig-preview-overlay" id="igPreviewOverlay">
+        <button class="ig-close-btn" onclick="closeIGPreview()">✕</button>
+        <div class="ig-preview-container">
+            <img class="ig-preview-image" id="igPreviewImage" alt="IG Story Preview">
+            <div class="ig-preview-buttons">
+                <button class="vc-btn" onclick="downloadIGImage()" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+                    💾 下載圖片
+                </button>
+                <button class="vc-btn vc-btn-secondary" onclick="closeIGPreview()">
+                    ← 返回
+                </button>
+            </div>
+            <p style="color: rgba(255,255,255,0.7); margin-top: var(--vc-space-md); font-size: 0.9rem;">
+                💡 手機可以長按圖片直接儲存<br>
+                下載後到 Instagram → 限時動態 → 選擇圖片分享
+            </p>
+        </div>
+    </div>
+
+    <div class="vc-game-card">
+        <h1 class="vc-title">🍹 飲料王挑戰 👑</h1>
+
+        <!-- 開始畫面 -->
+        <div class="screen active" id="startScreen">
+            <div class="welcome-badge">🧋☕🥤</div>
+
+            <div class="vc-card">
+                <h2 style="margin-bottom: var(--vc-space-md); color: var(--vc-primary);">🎮 遊戲規則</h2>
+                <ul class="info-list">
+                    <li>共有 20 題關於台灣飲料連鎖店的問題（隨機順序）</li>
+                    <li>每題 5 分，連擊可獲得額外加分</li>
+                    <li>解鎖成就，獲得特殊稱號</li>
+                    <li>生成 IG Story 圖片分享成績</li>
+                    <li>查看個人歷史最佳成績</li>
+                </ul>
+            </div>
+
+            <label class="vc-label" style="margin-top: var(--vc-space-lg);">請輸入你的名字：</label>
+            <input type="text" id="playerName" class="vc-input" placeholder="請輸入你的暱稱..." maxlength="20">
+
+            <div class="btn-group">
+                <button class="vc-btn" onclick="startGame()">🚀 開始挑戰</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('historyScreen')">📊 歷史記錄</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('achievementsScreen')">🏅 成就</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('leaderboardScreen')">🏆 排行榜</button>
+            </div>
+        </div>
+
+        <!-- 遊戲畫面 -->
+        <div class="screen" id="gameScreen">
+            <div class="game-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="scoreDisplay">0</div>
+                    <div class="stat-label">💎 得分</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="comboDisplay">0</div>
+                    <div class="stat-label">🔥 連擊</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="progressDisplay">0/20</div>
+                    <div class="stat-label">📝 進度</div>
+                </div>
+            </div>
+
+            <div class="feedback-card" id="feedbackCard"></div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <span class="question-number" id="questionNumber"></span>
+                    <span class="question-type-badge" id="questionType"></span>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options-grid" id="optionsGrid"></div>
+            </div>
+
+            <button class="vc-btn vc-btn-success" onclick="submitAnswer()" style="width: 100%;">
+                ✅ 提交答案
+            </button>
+        </div>
+
+        <!-- 結果畫面 -->
+        <div class="screen" id="resultScreen">
+            <div class="celebration-emoji" id="celebration"></div>
+            <h2 style="text-align: center; margin-bottom: var(--vc-space-md);">🎉 挑戰結束 🎉</h2>
+
+            <p style="text-align: center; color: var(--vc-text-light); margin-bottom: var(--vc-space-sm);" id="playerNameDisplay"></p>
+            <div class="final-score-display" id="finalScore">0</div>
+
+            <h3 style="text-align: center; font-size: 1.8rem; margin: var(--vc-space-md) 0;" id="titleBadge"></h3>
+            <div class="title-description-card" id="titleDescription"></div>
+
+            <div class="vc-card" style="margin: var(--vc-space-lg) 0;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--vc-space-md);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">✅ 答對</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-success);" id="correctCount">0</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">❌ 答錯</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-danger);" id="incorrectCount">0</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🔥 最高連擊</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-warning);" id="maxCombo">0</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🏆 排名</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-primary);" id="rankDisplay">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="vc-btn" onclick="shareToInstagram()" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+                    📸 分享到 IG
+                </button>
+                <button class="vc-btn vc-btn-secondary" onclick="shareResult()">📤 分享文字</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('answerReviewScreen')">📝 查看答案</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('achievementsScreen')">🏅 查看成就</button>
+                <button class="vc-btn" onclick="location.reload()">🔄 再玩一次</button>
+            </div>
+        </div>
+
+        <!-- 答案檢視畫面 -->
+        <div class="screen" id="answerReviewScreen">
+            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">📝 答案檢視</h2>
+            <div id="answerReviewContainer" style="max-height: 500px; overflow-y: auto;"></div>
+            <button class="vc-btn" onclick="showScreen('resultScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回結果
+            </button>
+        </div>
+
+        <!-- 成就畫面 -->
+        <div class="screen" id="achievementsScreen">
+            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">🏅 成就系統</h2>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回首頁
+            </button>
+        </div>
+
+        <!-- 歷史記錄畫面 -->
+        <div class="screen" id="historyScreen">
+            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">📊 歷史記錄</h2>
+            <div class="history-list" id="historyList"></div>
+            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回首頁
+            </button>
+        </div>
+
+        <!-- 排行榜畫面 -->
+        <div class="screen" id="leaderboardScreen">
+            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">🏆 排行榜 TOP 10</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>玩家</th>
+                        <th>分數</th>
+                        <th>日期</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody"></tbody>
+            </table>
+            <button class="vc-btn" onclick="showScreen('startScreen')" style="width: 100%; margin-top: var(--vc-space-lg);">
+                ← 返回首頁
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 遊戲資料 ====================
+        const QUESTIONS = [
+            { type: "單選題", question: "下列連鎖飲料店中，哪一家在官方常態純茶菜單上，確定有提供「四季春」品項？ (請選擇一個最正確的選項)", options: ["A. 50嵐", "B. 可不可熟成紅茶", "C. 迷客夏", "D. 鶴茶樓"], answer: "A. 50嵐" },
+            { type: "單選題", question: "下列關於各品牌品項的描述，哪一項陳述是錯誤的？ (請選擇該錯誤陳述)", options: ["A. 迷客夏：官方有手炒黑糖鮮奶", "B. 萬波：官方沒有販售奶蓋飲品", "C. 可不可：熟成紅茶系列官方提供中/大杯", "D. 50嵐：菜單沒有燕麥奶選項"], answer: "B. 萬波：官方沒有販售奶蓋飲品" },
+            { type: "單選題", question: "天仁喫茶趣的招牌茶品「913茶王」，其中的「9」代表的是下列哪一種茶葉？", options: ["A. 綠茶", "B. 烏龍茶", "C. 紅茶", "D. 白茶"], answer: "B. 烏龍茶" },
+            { type: "單選題", question: "下列哪一項「店家與其招牌配料」的組合是正確的？", options: ["A. 鶴茶樓 - 桂花凍", "B. 萬波 - 泰奶凍", "C. 五桐號 - 杏仁凍", "D. 得正 - 凍檸茶"], answer: "C. 五桐號 - 杏仁凍" },
+            { type: "單選題", question: "下列哪一家店的 Logo 主色系，官方固定採用「鮮豔橘色」作為品牌識別色？", options: ["A. 迷客夏", "B. 大苑子", "C. 可不可", "D. 鶴茶樓"], answer: "B. 大苑子" },
+            { type: "單選題", question: "「微氣泡」茶飲是下列哪一家店的獨有系列，且名稱縮寫為 \"TTP\"？", options: ["A. 大苑子", "B. Mr.Wish", "C. TEA-TOP", "D. Comebuy"], answer: "C. TEA-TOP" },
+            { type: "單選題", question: "「手作芋圓」是下列哪一家店的官方菜單上固定提供的加料品項？", options: ["A. CoCo都可", "B. 迷客夏", "C. 茶湯會", "D. 50嵐"], answer: "C. 茶湯會" },
+            { type: "單選題", question: "哪一家店的菜單中，明確將甜度分為「一分、三分、五分、七分」等精細度？", options: ["A. 50嵐", "B. 清心福全", "C. 可不可", "D. 得正"], answer: "D. 得正" },
+            { type: "單選題", question: "下列哪一家店的英文名稱為 \"KEBUKE\"？", options: ["A. 50嵐", "B. 可不可", "C. 清心福全", "D. 萬波"], answer: "B. 可不可" },
+            { type: "單選題", question: "下列哪一家店的菜單中，明確包含「茶葉」品種的名稱？", options: ["A. 迷客夏", "B. 得正", "C. CoCo都可", "D. 烏弄"], answer: "D. 烏弄" },
+            { type: "單選題", question: "下列哪一家店的吸管包裝上，固定印有「一杯好茶，一生朋友」的標語？", options: ["A. 萬波", "B. 50嵐", "C. 清心福全", "D. 可不可"], answer: "C. 清心福全" },
+            { type: "單選題", question: "下列哪一家店的招牌「奶茶」品項中，官方固定添加了「布丁」？", options: ["A. 50嵐", "B. CoCo都可", "C. 清心福全", "D. 茶の魔手"], answer: "A. 50嵐" },
+            { type: "單選題", question: "下列哪一個品項，明確包含「椰果」作為固定配料，且是該店的招牌？", options: ["A. 迷客夏 珍珠大正那堤", "B. 50嵐 一號", "C. CoCo都可 奶茶三兄弟", "D. 得正 焙烏龍奶茶"], answer: "B. 50嵐 一號" },
+            { type: "單選題", question: "「輕烏龍」是下列哪一家店的招牌純茶系列之一？", options: ["A. CoCo都可", "B. 得正", "C. 迷客夏", "D. 春陽茶事"], answer: "B. 得正" },
+            { type: "單選題", question: "「芝芝」系列（加入厚厚奶蓋和水果）是下列哪一家店的招牌，且常搭配葡萄或草莓？", options: ["A. 大苑子", "B. 麻古茶坊", "C. Mr.Wish", "D. 一芳"], answer: "B. 麻古茶坊" },
+            { type: "單選題", question: "「凍檸茶」是下列哪一家店的港式特色飲品？", options: ["A. 萬波", "B. Comebuy", "C. 迷客夏", "D. 鶴茶樓"], answer: "B. Comebuy" },
+            { type: "單選題", question: "「厚奶」系列是下列哪一家店的官方主打特色，強調奶味濃郁？", options: ["A. 50嵐", "B. 珍煮丹", "C. Comebuy", "D. 約翰紅茶"], answer: "D. 約翰紅茶" },
+            { type: "單選題", question: "哪一家店在顧客點「茶」飲時，會詢問顧客希望「茶的濃度」（淡/濃）？", options: ["A. 約翰紅茶", "B. 烏弄", "C. 鶴茶樓", "D. 50嵐"], answer: "B. 烏弄" },
+            { type: "單選題", question: "「微氣泡」茶飲是下列哪一家店的獨有特色，旨在創造與眾不同的口感？", options: ["A. TEA-TOP", "B. 可不可", "C. 清心福全", "D. 約翰紅茶"], answer: "A. TEA-TOP" },
+            { type: "單選題", question: "哪一家店的菜單上，將旗下鮮奶茶品項統稱為「那堤 (Natte)」？", options: ["A. 50嵐", "B. 迷客夏", "C. CoCo都可", "D. 約翰紅茶"], answer: "B. 迷客夏" }
+        ];
+
+        // 成就定義
+        const ACHIEVEMENTS = [
+            { id: 'first_perfect', name: '完美首殺', desc: '首次獲得滿分', icon: '🎯', condition: (stats) => stats.score >= 100 },
+            { id: 'combo_king', name: '連擊王', desc: '達到15連擊', icon: '🔥', condition: (stats) => stats.maxCombo >= 15 },
+            { id: 'no_mistake_5', name: '不敗傳說', desc: '連續5局不答錯', icon: '👑', condition: (stats) => stats.consecutivePerfect >= 5 },
+            { id: 'speed_demon', name: '速度惡魔', desc: '30秒內答完10題', icon: '⚡', condition: (stats) => stats.speed10 <= 30 },
+            { id: 'comeback', name: '逆轉勝', desc: '從0分逆轉到80分', icon: '💪', condition: (stats) => stats.comeback },
+            { id: 'veteran', name: '老將', desc: '遊玩10次以上', icon: '🎮', condition: (stats) => stats.playCount >= 10 }
+        ];
+
+        // ==================== 遊戲狀態 ====================
+        let gameState = {
+            playerName: '',
+            questions: [],
+            currentQuestionIndex: 0,
+            score: 0,
+            combo: 0,
+            maxCombo: 0,
+            correctCount: 0,
+            incorrectCount: 0,
+            selectedAnswer: null,
+            userAnswers: [],
+            soundEnabled: true,
+            startTime: null,
+            questionTimes: []
+        };
+
+        // ==================== 初始化 ====================
+        function initGame() {
+            loadHistory();
+            loadAchievements();
+            updateAchievementsDisplay();
+            updateHistoryDisplay();
+        }
+
+        // ==================== 畫面切換 ====================
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            if (screenId === 'achievementsScreen') updateAchievementsDisplay();
+            if (screenId === 'historyScreen') updateHistoryDisplay();
+            if (screenId === 'leaderboardScreen') updateLeaderboard();
+            if (screenId === 'answerReviewScreen') updateAnswerReview();
+        }
+
+        // ==================== 題目隨機化 ====================
+        function shuffleQuestions() {
+            const shuffled = [...QUESTIONS];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // ==================== 開始遊戲 ====================
+        function startGame() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                alert('請先輸入你的名字！');
+                return;
+            }
+
+            gameState.playerName = name;
+            gameState.questions = shuffleQuestions();
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.combo = 0;
+            gameState.maxCombo = 0;
+            gameState.correctCount = 0;
+            gameState.incorrectCount = 0;
+            gameState.userAnswers = [];
+            gameState.selectedAnswer = null;
+            gameState.startTime = Date.now();
+            gameState.questionTimes = [];
+
+            showScreen('gameScreen');
+            playSound('start');
+            loadQuestion();
+        }
+
+        // ==================== 載入題目 ====================
+        function loadQuestion() {
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
+                endGame();
+                return;
+            }
+
+            const q = gameState.questions[gameState.currentQuestionIndex];
+            document.getElementById('questionNumber').textContent = `第 ${gameState.currentQuestionIndex + 1} / 20 題`;
+            document.getElementById('questionType').textContent = q.type;
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('progressDisplay').textContent = `${gameState.currentQuestionIndex}/20`;
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            gameState.selectedAnswer = null;
+
+            q.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option, btn);
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('feedbackCard').className = 'feedback-card';
+            gameState.questionStartTime = Date.now();
+        }
+
+        // ==================== 選擇答案 ====================
+        function selectOption(option, btn) {
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            gameState.selectedAnswer = option;
+        }
+
+        // ==================== 提交答案 ====================
+        function submitAnswer() {
+            if (!gameState.selectedAnswer) {
+                alert('請選擇答案！');
+                return;
+            }
+
+            const q = gameState.questions[gameState.currentQuestionIndex];
+            const isCorrect = gameState.selectedAnswer === q.answer;
+            const timeTaken = (Date.now() - gameState.questionStartTime) / 1000;
+            gameState.questionTimes.push(timeTaken);
+
+            gameState.userAnswers.push({
+                question: q.question,
+                userAnswer: gameState.selectedAnswer,
+                correctAnswer: q.answer,
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                gameState.correctCount++;
+                gameState.combo++;
+                gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
+
+                let points = 5;
+                if (gameState.combo >= 3) {
+                    points = Math.round(5 * (1 + (gameState.combo - 2) * 0.2));
+                }
+                gameState.score += points;
+
+                showFeedback(true, points);
+                playSound('correct');
+                if (gameState.combo >= 5) launchFireworks();
+            } else {
+                gameState.incorrectCount++;
+                gameState.combo = 0;
+                showFeedback(false);
+                playSound('incorrect');
+            }
+
+            updateGameStats();
+
+            setTimeout(() => {
+                gameState.currentQuestionIndex++;
+                loadQuestion();
+            }, isCorrect ? 2000 : 4000);
+        }
+
+        // ==================== 顯示反饋 ====================
+        function showFeedback(isCorrect, points = 0) {
+            const card = document.getElementById('feedbackCard');
+            card.className = `feedback-card show ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            if (isCorrect) {
+                let message = `✓ 正確！+${points}分`;
+                if (gameState.combo >= 10) message += ' | 🔥💥 神級連擊！';
+                else if (gameState.combo >= 7) message += ' | 🔥🔥 超狂連擊！';
+                else if (gameState.combo >= 5) message += ' | 🔥 火熱連擊！';
+                else if (gameState.combo >= 3) message += ' | ✨ 連擊中！';
+                card.textContent = message;
+            } else {
+                const messages = ['😅 沒關係！', '💪 繼續加油！', '🤔 學到了！', '📚 長知識！'];
+                const msg = messages[Math.floor(Math.random() * messages.length)];
+                card.textContent = `✗ ${msg} 正確答案：${gameState.questions[gameState.currentQuestionIndex].answer}`;
+            }
+        }
+
+        // ==================== 更新遊戲統計 ====================
+        function updateGameStats() {
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            document.getElementById('comboDisplay').textContent = gameState.combo;
+        }
+
+        // ==================== 結束遊戲 ====================
+        function endGame() {
+            const totalTime = (Date.now() - gameState.startTime) / 1000;
+            const avgTime = gameState.questionTimes.reduce((a, b) => a + b, 0) / gameState.questionTimes.length;
+
+            saveGameHistory({
+                name: gameState.playerName,
+                score: gameState.score,
+                correct: gameState.correctCount,
+                incorrect: gameState.incorrectCount,
+                maxCombo: gameState.maxCombo,
+                totalTime: totalTime,
+                avgTime: avgTime,
+                date: new Date().toLocaleDateString('zh-TW'),
+                timestamp: Date.now()
+            });
+
+            checkAchievements();
+            updateLeaderboard();
+
+            const {title, description, celebration} = getTitleInfo(gameState.score);
+
+            document.getElementById('playerNameDisplay').textContent = `玩家：${gameState.playerName}`;
+            document.getElementById('finalScore').textContent = `${gameState.score} 分`;
+            document.getElementById('titleBadge').textContent = title;
+            document.getElementById('titleDescription').textContent = description;
+            document.getElementById('celebration').textContent = celebration;
+            document.getElementById('correctCount').textContent = gameState.correctCount;
+            document.getElementById('incorrectCount').textContent = gameState.incorrectCount;
+            document.getElementById('maxCombo').textContent = gameState.maxCombo;
+
+            const rank = getPlayerRank();
+            document.getElementById('rankDisplay').textContent = rank > 0 ? `第 ${rank} 名` : '-';
+
+            if (gameState.score >= 100) launchFireworks(20);
+            playSound('finish');
+            showScreen('resultScreen');
+        }
+
+        // ==================== 頭銜資訊 ====================
+        function getTitleInfo(score) {
+            if (score >= 100) return { title: '👑 飲料王', description: '您可能就是那個發明波霸的人，所有口味對您來說都只是數學題！', celebration: '🎊👑🎉' };
+            if (score >= 81) return { title: '🥤 手搖達人', description: '差一點就是神了！您的舌頭已經投保千萬，連新口味的甜度都能預測。', celebration: '🎉🥤' };
+            if (score >= 61) return { title: '🧋 配料收藏家', description: '您知道每一顆芋圓的產地和咀嚼感，您的存在讓配料區不敢出錯。', celebration: '✨🧋' };
+            if (score >= 41) return { title: '☕ 冰塊甜度糾察隊', description: '能分辨出七分糖和八分糖的細微差別，但經常排錯隊伍。', celebration: '😊☕' };
+            if (score >= 21) return { title: '🚶 永遠點錯店的悲劇人物', description: '明明想喝 CoCo，卻走進了 50 嵐。但至少您走對了排隊的方向！', celebration: '😅🚶' };
+            return { title: '💧 白開水信徒', description: '對不起，您是來錯世界的勇者。建議您去賣地瓜球，因為您顯然與茶飲無緣。', celebration: '💦😂' };
+        }
+
+        // ==================== 煙火效果 ====================
+        function launchFireworks(count = 10) {
+            const container = document.getElementById('fireworksContainer');
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => createFirework(container), i * 200);
+            }
+        }
+
+        function createFirework(container) {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.6;
+
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 50;
+                particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+                particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // ==================== 音效系統 ====================
+        const SOUNDS = {
+            correct: () => playTone(800, 0.1),
+            incorrect: () => playTone(200, 0.2),
+            start: () => playTone(600, 0.1),
+            finish: () => { playTone(500, 0.1); setTimeout(() => playTone(700, 0.15), 100); }
+        };
+
+        function playSound(type) {
+            if (!gameState.soundEnabled || !SOUNDS[type]) return;
+            SOUNDS[type]();
+        }
+
+        function playTone(freq, duration) {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + duration);
+        }
+
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            document.getElementById('soundToggle').textContent = gameState.soundEnabled ? '🔊' : '🔇';
+        }
+
+        // ==================== 成就系統 ====================
+        function loadAchievements() {
+            const saved = localStorage.getItem('drinkKingAchievements');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveAchievement(achievementId) {
+            const achievements = loadAchievements();
+            if (!achievements.includes(achievementId)) {
+                achievements.push(achievementId);
+                localStorage.setItem('drinkKingAchievements', JSON.stringify(achievements));
+                showAchievementNotification(achievementId);
+            }
+        }
+
+        function checkAchievements() {
+            const history = loadHistory();
+            const stats = {
+                score: gameState.score,
+                maxCombo: gameState.maxCombo,
+                consecutivePerfect: calculateConsecutivePerfect(history),
+                playCount: history.length,
+                speed10: gameState.questionTimes.slice(0, 10).reduce((a, b) => a + b, 0),
+                comeback: gameState.score >= 80 && gameState.incorrectCount > 0
+            };
+
+            ACHIEVEMENTS.forEach(ach => {
+                if (ach.condition(stats)) {
+                    saveAchievement(ach.id);
+                }
+            });
+        }
+
+        function calculateConsecutivePerfect(history) {
+            let consecutive = 0;
+            for (let i = history.length - 1; i >= 0; i--) {
+                if (history[i].incorrect === 0) consecutive++;
+                else break;
+            }
+            return consecutive;
+        }
+
+        function showAchievementNotification(achievementId) {
+            const ach = ACHIEVEMENTS.find(a => a.id === achievementId);
+            if (!ach) return;
+
+            const notif = document.createElement('div');
+            notif.className = 'achievement-notification';
+            notif.innerHTML = `
+                <div style="font-size: 2rem; margin-bottom: 8px;">${ach.icon}</div>
+                <div style="font-weight: 700; margin-bottom: 4px;">成就解鎖！</div>
+                <div>${ach.name}</div>
+            `;
+            document.body.appendChild(notif);
+
+            playSound('finish');
+            launchFireworks(5);
+
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        function updateAchievementsDisplay() {
+            const grid = document.getElementById('achievementsGrid');
+            const unlocked = loadAchievements();
+
+            grid.innerHTML = ACHIEVEMENTS.map(ach => `
+                <div class="achievement-item ${unlocked.includes(ach.id) ? 'unlocked' : 'locked'}">
+                    <div class="achievement-icon">${ach.icon}</div>
+                    <div class="achievement-name">${ach.name}</div>
+                    <div class="achievement-desc">${ach.desc}</div>
+                    ${unlocked.includes(ach.id) ? '<div style="margin-top: 8px; color: #ffd700; font-weight: 700;">✓ 已解鎖</div>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // ==================== 歷史記錄 ====================
+        function loadHistory() {
+            const saved = localStorage.getItem('drinkKingHistory');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveGameHistory(game) {
+            const history = loadHistory();
+            history.push(game);
+            history.sort((a, b) => b.score - a.score);
+            localStorage.setItem('drinkKingHistory', JSON.stringify(history.slice(0, 100)));
+
+            // 同時更新排行榜
+            saveToLeaderboard();
+        }
+
+        function updateHistoryDisplay() {
+            const history = loadHistory();
+            const list = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                list.innerHTML = '<div class="vc-card" style="text-align: center; color: var(--vc-text-light);">還沒有遊玩記錄</div>';
+                return;
+            }
+
+            const best = Math.max(...history.map(h => h.score));
+            list.innerHTML = history.slice(0, 20).map(h => `
+                <div class="history-item ${h.score === best ? 'best' : ''}">
+                    <div>
+                        <div style="font-weight: 700;">${h.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">${h.date}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-primary);">${h.score}</div>
+                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🔥 ${h.maxCombo}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== 分享功能 ====================
+        function shareResult() {
+            const {title} = getTitleInfo(gameState.score);
+            let gameUrl = window.location.href;
+            if (gameUrl.startsWith('file://')) gameUrl = '';
+
+            const text = `🍹 飲料王挑戰 👑
+
+🎮 我的戰績：
+👤 ${gameState.playerName}
+💯 ${gameState.score} 分
+🏆 ${title}
+✅ 答對 ${gameState.correctCount} 題
+🔥 最高連擊 ${gameState.maxCombo}
+
+━━━━━━━━━━━━━━
+💪 我在飲料王挑戰中獲得了「${title}」的稱號！
+🧋 你也來挑戰看看吧！
+${gameUrl ? '\n👉 ' + gameUrl : ''}
+
+#飲料王挑戰 #VibeCodingGames`;
+
+            // 嘗試使用 Web Share API
+            if (navigator.share) {
+                navigator.share({
+                    title: '飲料王挑戰',
+                    text: text
+                }).catch(() => copyToClipboard(text));
+            } else {
+                copyToClipboard(text);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ 成績已複製到剪貼簿！');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('✅ 成績已複製到剪貼簿！');
+            });
+        }
+
+        // ==================== IG Story 圖片生成 ====================
+        function getTitleGradient(score) {
+            if (score >= 100) return ['#FFD700', '#FFA500']; // 金色
+            if (score >= 81) return ['#667eea', '#764ba2']; // 紫色
+            if (score >= 61) return ['#11998e', '#38ef7d']; // 青綠色
+            if (score >= 41) return ['#f093fb', '#f5576c']; // 粉橙色
+            if (score >= 21) return ['#4b6cb7', '#182848']; // 深藍色
+            return ['#bdc3c7', '#2c3e50']; // 灰色
+        }
+
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split('');
+            let lines = [];
+            let currentLine = '';
+
+            for (let i = 0; i < words.length; i++) {
+                const testLine = currentLine + words[i];
+                const metrics = ctx.measureText(testLine);
+
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function generateIGStory() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1080;
+            canvas.height = 1920;
+            const ctx = canvas.getContext('2d');
+
+            const {title, description} = getTitleInfo(gameState.score);
+            const gradient = getTitleGradient(gameState.score);
+
+            // 背景漸層
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920);
+            bgGradient.addColorStop(0, gradient[0]);
+            bgGradient.addColorStop(1, gradient[1]);
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, 1080, 1920);
+
+            // 半透明覆蓋層（讓文字更清晰）
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, 1080, 1920);
+
+            // 頂部品牌
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = 'bold 36px -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('VIBECODING GAMES', 540, 80);
+
+            // 遊戲標題
+            ctx.font = 'bold 56px -apple-system, sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.fillText('🍹 飲料王挑戰 👑', 540, 160);
+
+            // 頭銜 emoji（超大）
+            ctx.font = '200px Arial';
+            ctx.textAlign = 'center';
+            const titleEmoji = title.split(' ')[0];
+            ctx.fillText(titleEmoji, 540, 420);
+
+            // 頭銜文字
+            ctx.font = 'bold 80px -apple-system, sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 4;
+            const titleText = title.substring(title.indexOf(' ') + 1);
+            ctx.fillText(titleText, 540, 540);
+            ctx.shadowBlur = 0;
+
+            // 分數（超大顯示）
+            ctx.font = 'bold 180px -apple-system, sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.fillText(gameState.score, 540, 750);
+
+            ctx.font = 'bold 48px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText('分', 540, 820);
+
+            // 玩家名字
+            ctx.font = 'bold 44px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.fillText(`玩家：${gameState.playerName}`, 540, 920);
+
+            // 分隔線
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(140, 980);
+            ctx.lineTo(940, 980);
+            ctx.stroke();
+
+            // 統計數據區
+            ctx.font = 'bold 40px -apple-system, sans-serif';
+            ctx.fillStyle = 'white';
+
+            // 答對
+            ctx.fillText('✅', 240, 1080);
+            ctx.font = '32px -apple-system, sans-serif';
+            ctx.fillText('答對', 240, 1130);
+            ctx.font = 'bold 56px -apple-system, sans-serif';
+            ctx.fillText(gameState.correctCount, 240, 1200);
+
+            // 答錯
+            ctx.fillText('❌', 540, 1080);
+            ctx.font = '32px -apple-system, sans-serif';
+            ctx.fillText('答錯', 540, 1130);
+            ctx.font = 'bold 56px -apple-system, sans-serif';
+            ctx.fillText(gameState.incorrectCount, 540, 1200);
+
+            // 連擊
+            ctx.fillText('🔥', 840, 1080);
+            ctx.font = '32px -apple-system, sans-serif';
+            ctx.fillText('連擊', 840, 1130);
+            ctx.font = 'bold 56px -apple-system, sans-serif';
+            ctx.fillText(gameState.maxCombo, 840, 1200);
+
+            // 分隔線
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(140, 1260);
+            ctx.lineTo(940, 1260);
+            ctx.stroke();
+
+            // 頭銜描述（多行文字）
+            ctx.font = '36px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.textAlign = 'center';
+            const descLines = wrapText(ctx, description, 900);
+            let descY = 1350;
+            descLines.forEach((line, i) => {
+                ctx.fillText(line, 540, descY + (i * 50));
+            });
+
+            // 底部呼籲文字
+            const bottomY = 1700;
+            ctx.font = 'bold 48px -apple-system, sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.fillText('🧋 你也來挑戰看看吧！', 540, bottomY);
+
+            // 底部標籤
+            ctx.font = 'bold 36px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillText('#飲料王挑戰 #VibeCodingGames', 540, bottomY + 80);
+
+            return canvas;
+        }
+
+        let currentIGImageBlob = null;
+
+        function shareToInstagram() {
+            const canvas = generateIGStory();
+
+            // 轉換為圖片並顯示預覽
+            canvas.toBlob((blob) => {
+                currentIGImageBlob = blob;
+                const url = URL.createObjectURL(blob);
+
+                const previewImg = document.getElementById('igPreviewImage');
+                previewImg.src = url;
+
+                const overlay = document.getElementById('igPreviewOverlay');
+                overlay.classList.add('active');
+
+                playSound('finish');
+            }, 'image/png');
+        }
+
+        function closeIGPreview() {
+            const overlay = document.getElementById('igPreviewOverlay');
+            overlay.classList.remove('active');
+
+            const previewImg = document.getElementById('igPreviewImage');
+            if (previewImg.src) {
+                URL.revokeObjectURL(previewImg.src);
+                previewImg.src = '';
+            }
+
+            currentIGImageBlob = null;
+        }
+
+        function downloadIGImage() {
+            if (!currentIGImageBlob) return;
+
+            const url = URL.createObjectURL(currentIGImageBlob);
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            link.download = `飲料王挑戰_${gameState.playerName}_${gameState.score}分_${timestamp}.png`;
+            link.href = url;
+            link.click();
+
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+
+            alert('✅ 圖片已下載到您的裝置！\n\n手機用戶也可以長按圖片直接儲存喔～');
+        }
+
+        // ==================== 排行榜 ====================
+        function saveToLeaderboard() {
+            const leaderboard = getLeaderboard();
+            leaderboard.push({
+                name: gameState.playerName,
+                score: gameState.score,
+                date: new Date().toLocaleDateString('zh-TW'),
+                timestamp: Date.now()
+            });
+            leaderboard.sort((a, b) => b.score - a.score);
+            localStorage.setItem('drinkKingLeaderboard', JSON.stringify(leaderboard.slice(0, 100)));
+        }
+
+        function getLeaderboard() {
+            const saved = localStorage.getItem('drinkKingLeaderboard');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function getPlayerRank() {
+            const leaderboard = getLeaderboard();
+            return leaderboard.findIndex(e => e.name === gameState.playerName && e.score === gameState.score) + 1;
+        }
+
+        function updateLeaderboard() {
+            const leaderboard = getLeaderboard();
+            const tbody = document.getElementById('leaderboardBody');
+            const top10 = leaderboard.slice(0, 10);
+
+            if (top10.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">還沒有記錄</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = top10.map((entry, i) => {
+                let rankDisplay = i + 1;
+                let rankClass = '';
+                let prefix = '';
+
+                if (i === 0) { rankDisplay = '🥇'; rankClass = 'rank-1'; prefix = '👑 '; }
+                else if (i === 1) { rankDisplay = '🥈'; rankClass = 'rank-2'; prefix = '⭐ '; }
+                else if (i === 2) { rankDisplay = '🥉'; rankClass = 'rank-3'; prefix = '✨ '; }
+
+                return `<tr>
+                    <td class="${rankClass}">${rankDisplay}</td>
+                    <td>${prefix}${entry.name}</td>
+                    <td><strong>${entry.score}</strong> 分</td>
+                    <td>${entry.date}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // ==================== 答案檢視 ====================
+        function updateAnswerReview() {
+            const container = document.getElementById('answerReviewContainer');
+            container.innerHTML = gameState.userAnswers.map((item, i) => `
+                <div class="answer-review-item ${item.isCorrect ? 'correct' : 'incorrect'}">
+                    <div style="font-weight: 700; margin-bottom: 8px;">
+                        第 ${i + 1} 題 ${item.isCorrect ? '✅' : '❌'}
+                    </div>
+                    <div style="margin-bottom: 8px; font-size: 0.95rem;">${item.question}</div>
+                    <div style="font-size: 0.9rem;">
+                        <div><strong>你的答案：</strong>${item.userAnswer}</div>
+                        <div><strong>正確答案：</strong>${item.correctAnswer}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== 初始化 ====================
+        window.onload = initGame;
+    </script>
+</body>
+</html>
