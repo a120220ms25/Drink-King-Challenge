@@ -49,16 +49,21 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
         body {
             font-family: var(--font-style);
             background: var(--bg-canvas);
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: var(--vc-space-lg);
             position: relative;
-            overflow-x: hidden;
             color: var(--text-dark);
         }
 
@@ -81,9 +86,11 @@
             padding: var(--vc-space-xl);
             max-width: 700px;
             width: 100%;
+            max-height: calc(100vh - var(--vc-space-lg) * 2);
             box-shadow: var(--shadow-md);
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         /* 標題 - 簡約風格 */
@@ -561,25 +568,195 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: var(--vc-space-sm);
+            }
+
             .vc-game-card {
-                padding: var(--vc-space-lg);
+                padding: var(--vc-space-md);
+                max-height: calc(100vh - var(--vc-space-sm) * 2);
             }
 
             .vc-title {
-                font-size: 2rem;
+                font-size: 1.5rem;
+                margin-bottom: var(--vc-space-md);
+            }
+
+            .vc-brand {
+                font-size: 0.6rem;
+                top: var(--vc-space-sm);
+                left: var(--vc-space-sm);
+            }
+
+            .vc-sound-toggle {
+                top: var(--vc-space-sm);
+                right: var(--vc-space-sm);
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
             }
 
             .game-stats {
                 grid-template-columns: repeat(3, 1fr);
                 gap: var(--vc-space-sm);
+                margin-bottom: var(--vc-space-md);
+            }
+
+            .stat-card {
+                padding: var(--vc-space-sm);
             }
 
             .stat-value {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .question-card {
+                padding: var(--vc-space-md);
+                margin-bottom: var(--vc-space-md);
+            }
+
+            .question-text {
+                font-size: 1rem;
+                line-height: 1.5;
+                margin-bottom: var(--vc-space-md);
+            }
+
+            .option-btn {
+                padding: var(--vc-space-sm);
+                font-size: 0.9rem;
+            }
+
+            .vc-btn {
+                padding: var(--vc-space-sm) var(--vc-space-md);
+                font-size: 0.9rem;
+            }
+
+            .btn-group {
+                gap: var(--vc-space-xs);
+                margin-top: var(--vc-space-md);
+            }
+
+            .welcome-badge {
+                font-size: 2.5rem;
+                margin-bottom: var(--vc-space-md);
+            }
+
+            .vc-card {
+                padding: var(--vc-space-md);
+            }
+
+            .vc-card h2 {
+                font-size: 1.2rem;
+            }
+
+            .info-list li {
+                font-size: 0.9rem;
+                padding: var(--vc-space-xs) 0;
+            }
+
+            .vc-input {
+                padding: var(--vc-space-sm);
+                font-size: 0.9rem;
+                margin: var(--vc-space-sm) auto;
+            }
+
+            .final-score-display {
+                font-size: 3rem;
+                margin: var(--vc-space-md) 0;
+            }
+
+            .celebration-emoji {
+                font-size: 2.5rem;
+                margin: var(--vc-space-sm) 0;
+            }
+
+            .title-description-card {
+                font-size: 0.9rem;
+                padding: var(--vc-space-md);
+                line-height: 1.5;
             }
 
             .achievements-grid {
                 grid-template-columns: 1fr;
+                gap: var(--vc-space-sm);
+            }
+
+            .achievement-icon {
+                font-size: 2rem;
+            }
+
+            .achievement-name {
+                font-size: 0.95rem;
+            }
+
+            .achievement-desc {
+                font-size: 0.8rem;
+            }
+
+            .history-list {
+                max-height: 300px;
+            }
+
+            .history-item {
+                padding: var(--vc-space-sm);
+                flex-direction: column;
+                gap: var(--vc-space-xs);
+                align-items: flex-start;
+            }
+
+            .answer-review-item {
+                padding: var(--vc-space-sm);
+                margin-bottom: var(--vc-space-sm);
+                font-size: 0.9rem;
+            }
+
+            #answerReviewContainer {
+                max-height: 350px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: var(--vc-space-md);
+            }
+
+            /* 統計中心 - 手機版改為 2x3 網格 */
+            #statsScreen .stat-card:first-child {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .vc-title {
+                font-size: 1.3rem;
+            }
+
+            .stat-value {
+                font-size: 1.1rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+            }
+
+            .question-text {
+                font-size: 0.9rem;
+            }
+
+            .option-btn {
+                font-size: 0.85rem;
+            }
+
+            .vc-btn {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .final-score-display {
+                font-size: 2.5rem;
             }
         }
 
@@ -720,6 +897,29 @@
         @media (max-width: 768px) {
             .ig-preview-container {
                 max-width: 90vw;
+            }
+
+            .ig-preview-overlay {
+                padding: var(--vc-space-sm);
+            }
+
+            .ig-close-btn {
+                top: var(--vc-space-sm);
+                right: var(--vc-space-sm);
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* 優化手機滾動體驗 */
+        @media (max-width: 768px) {
+            .vc-game-card {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            ::-webkit-scrollbar {
+                width: 4px;
             }
         }
     </style>
