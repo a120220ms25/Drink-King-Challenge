@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>飲料王挑戰 👑 | VibeCoding Games</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ==================== VibeCoding 設計系統 ==================== */
+        /* ==================== 簡約品牌色風格設計系統 ==================== */
         :root {
-            /* 品牌色系 */
-            --vc-primary: #667eea;
-            --vc-primary-dark: #5568d3;
-            --vc-secondary: #764ba2;
-            --vc-accent: #f093fb;
-            --vc-success: #00b894;
-            --vc-warning: #fdcb6e;
-            --vc-danger: #ff7675;
+            /* 品牌色系 - Simplified Brand Color Style */
+            --bg-canvas: #DFDFDF;
+            --panel-color: #FFFFFF;
+            --text-dark: #333333;
+            --accent-color: #D69396;
+            --shadow-color: #B07C7F;
+            --font-style: 'Inter', sans-serif;
+            --border-radius: 6px;
 
-            /* 中性色 */
-            --vc-bg: #f8f9fa;
-            --vc-surface: #ffffff;
-            --vc-text: #2d3436;
-            --vc-text-light: #636e72;
-            --vc-border: #dfe6e9;
+            /* 輔助色 */
+            --accent-hover: #C88488;
+            --success-color: #8BC34A;
+            --danger-color: #E57373;
+            --text-light: #666666;
+            --border-color: #E0E0E0;
 
             /* 間距系統 */
             --vc-space-xs: 4px;
@@ -31,20 +34,13 @@
             --vc-space-xl: 32px;
             --vc-space-2xl: 48px;
 
-            /* 圓角系統 */
-            --vc-radius-sm: 8px;
-            --vc-radius-md: 12px;
-            --vc-radius-lg: 16px;
-            --vc-radius-xl: 24px;
-            --vc-radius-full: 9999px;
-
             /* 陰影系統 */
-            --vc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --vc-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-            --vc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-button: 0 4px 0 var(--shadow-color);
 
             /* 動畫 */
-            --vc-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.2s ease;
         }
 
         * {
@@ -54,8 +50,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            background: linear-gradient(135deg, var(--vc-primary) 0%, var(--vc-secondary) 100%);
+            font-family: var(--font-style);
+            background: var(--bg-canvas);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -63,6 +59,7 @@
             padding: var(--vc-space-lg);
             position: relative;
             overflow-x: hidden;
+            color: var(--text-dark);
         }
 
         /* VibeCoding 品牌標誌 */
@@ -71,77 +68,86 @@
             top: var(--vc-space-md);
             left: var(--vc-space-md);
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-light);
             font-weight: 600;
             letter-spacing: 1px;
             z-index: 100;
         }
 
-        /* 遊戲容器 - VibeCoding 卡片風格 */
+        /* 遊戲容器 - 簡約卡片風格 */
         .vc-game-card {
-            background: var(--vc-surface);
-            border-radius: var(--vc-radius-xl);
+            background: var(--panel-color);
+            border-radius: var(--border-radius);
             padding: var(--vc-space-xl);
             max-width: 700px;
             width: 100%;
-            box-shadow: var(--vc-shadow-lg);
+            box-shadow: var(--shadow-md);
             position: relative;
             overflow: hidden;
         }
 
-        /* 標題 - VibeCoding 風格 */
+        /* 標題 - 簡約風格 */
         .vc-title {
             text-align: center;
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-dark);
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: var(--vc-space-lg);
             letter-spacing: -0.5px;
         }
 
-        /* VibeCoding 按鈕系統 */
+        /* 按鈕系統 - 專業沉降效果 */
         .vc-btn {
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            background: var(--accent-color);
             color: white;
             border: none;
             padding: var(--vc-space-md) var(--vc-space-xl);
-            border-radius: var(--vc-radius-full);
+            border-radius: var(--border-radius);
             font-size: 1rem;
             font-weight: 600;
+            font-family: var(--font-style);
             cursor: pointer;
-            transition: var(--vc-transition);
-            box-shadow: var(--vc-shadow-sm);
+            transition: var(--transition);
+            box-shadow: var(--shadow-button);
             position: relative;
             overflow: hidden;
         }
 
         .vc-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--vc-shadow-md);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
         .vc-btn:active {
-            transform: translateY(0);
+            transform: translateY(3px);
+            box-shadow: 0 0 0;
         }
 
         .vc-btn-secondary {
-            background: var(--vc-text-light);
+            background: var(--text-light);
+            box-shadow: 0 4px 0 #4a4a4a;
+        }
+
+        .vc-btn-secondary:hover {
+            background: #555555;
         }
 
         .vc-btn-success {
-            background: var(--vc-success);
+            background: var(--success-color);
+            box-shadow: 0 4px 0 #6da32c;
         }
 
-        /* VibeCoding 卡片 */
+        .vc-btn-success:hover {
+            background: #7CB342;
+        }
+
+        /* 卡片 */
         .vc-card {
-            background: var(--vc-bg);
-            border-radius: var(--vc-radius-md);
+            background: var(--bg-canvas);
+            border-radius: var(--border-radius);
             padding: var(--vc-space-lg);
-            border: 2px solid var(--vc-border);
-            transition: var(--vc-transition);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
         }
 
         /* 音效控制 */
@@ -149,22 +155,28 @@
             position: absolute;
             top: var(--vc-space-md);
             right: var(--vc-space-md);
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            background: var(--panel-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
             width: 40px;
             height: 40px;
-            border-radius: var(--vc-radius-full);
+            border-radius: var(--border-radius);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: var(--vc-transition);
+            transition: var(--transition);
             font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
         }
 
         .vc-sound-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--bg-canvas);
+            transform: translateY(-1px);
+        }
+
+        .vc-sound-toggle:active {
+            transform: translateY(1px);
         }
 
         /* 煙火容器 */
@@ -202,11 +214,12 @@
             position: fixed;
             top: var(--vc-space-lg);
             right: var(--vc-space-lg);
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #000;
+            background: #fff9e6;
+            color: var(--text-dark);
             padding: var(--vc-space-md) var(--vc-space-lg);
-            border-radius: var(--vc-radius-md);
-            box-shadow: var(--vc-shadow-lg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 2px solid #ffd700;
             z-index: 2000;
             animation: slideIn 0.5s ease-out;
             font-weight: 600;
@@ -268,32 +281,29 @@
         .stat-card {
             text-align: center;
             padding: var(--vc-space-md);
-            background: var(--vc-bg);
-            border-radius: var(--vc-radius-md);
-            border: 2px solid var(--vc-border);
+            background: var(--bg-canvas);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-color);
         }
 
         .stat-label {
             font-size: 0.85rem;
-            color: var(--vc-text-light);
+            color: var(--text-light);
             margin-top: var(--vc-space-xs);
         }
 
         .question-card {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
             padding: var(--vc-space-lg);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             margin-bottom: var(--vc-space-lg);
-            border: 2px solid var(--vc-border);
+            border: 1px solid var(--border-color);
         }
 
         .question-header {
@@ -305,14 +315,14 @@
 
         .question-number {
             font-weight: 700;
-            color: var(--vc-primary);
+            color: var(--accent-color);
         }
 
         .question-type-badge {
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            background: var(--accent-color);
             color: white;
             padding: var(--vc-space-xs) var(--vc-space-md);
-            border-radius: var(--vc-radius-full);
+            border-radius: var(--border-radius);
             font-size: 0.85rem;
             font-weight: 600;
         }
@@ -320,7 +330,7 @@
         .question-text {
             font-size: 1.1rem;
             line-height: 1.6;
-            color: var(--vc-text);
+            color: var(--text-dark);
             margin-bottom: var(--vc-space-lg);
         }
 
@@ -330,35 +340,38 @@
         }
 
         .option-btn {
-            background: white;
-            border: 2px solid var(--vc-border);
+            background: var(--panel-color);
+            border: 1px solid var(--border-color);
             padding: var(--vc-space-md);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             text-align: left;
             cursor: pointer;
-            transition: var(--vc-transition);
+            transition: var(--transition);
             font-size: 1rem;
+            font-family: var(--font-style);
+            color: var(--text-dark);
         }
 
         .option-btn:hover {
-            border-color: var(--vc-primary);
-            background: #f0f3ff;
-            transform: translateX(4px);
+            border-color: var(--accent-color);
+            background: var(--bg-canvas);
+            transform: translateX(2px);
         }
 
         .option-btn.selected {
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            background: var(--accent-color);
             color: white;
-            border-color: transparent;
+            border-color: var(--accent-color);
         }
 
         .feedback-card {
             padding: var(--vc-space-md);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             margin-bottom: var(--vc-space-md);
             font-weight: 600;
             text-align: center;
             display: none;
+            border: 1px solid;
         }
 
         .feedback-card.show {
@@ -373,13 +386,15 @@
         }
 
         .feedback-card.correct {
-            background: linear-gradient(135deg, #d4edda, #b8e6c1);
-            color: #155724;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: var(--success-color);
         }
 
         .feedback-card.incorrect {
-            background: linear-gradient(135deg, #f8d7da, #ffb3ba);
-            color: #721c24;
+            background: #ffebee;
+            color: #c62828;
+            border-color: var(--danger-color);
         }
 
         /* 成就系統 */
@@ -391,18 +406,18 @@
         }
 
         .achievement-item {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
             padding: var(--vc-space-md);
-            border-radius: var(--vc-radius-md);
-            border: 2px solid var(--vc-border);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
             text-align: center;
-            transition: var(--vc-transition);
+            transition: var(--transition);
         }
 
         .achievement-item.unlocked {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            background: #fff9e6;
             border-color: #ffd700;
-            transform: scale(1.02);
+            border-width: 2px;
         }
 
         .achievement-item.locked {
@@ -422,7 +437,7 @@
 
         .achievement-desc {
             font-size: 0.85rem;
-            color: var(--vc-text-light);
+            color: var(--text-light);
         }
 
 
@@ -433,18 +448,19 @@
         }
 
         .history-item {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
             padding: var(--vc-space-md);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             margin-bottom: var(--vc-space-sm);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--border-color);
         }
 
         .history-item.best {
             border: 2px solid #ffd700;
-            background: linear-gradient(135deg, #fff9e6, #fffbf0);
+            background: #fff9e6;
         }
 
         /* 按鈕組 */
@@ -461,26 +477,29 @@
             width: 100%;
             max-width: 400px;
             padding: var(--vc-space-md);
-            border: 2px solid var(--vc-border);
-            border-radius: var(--vc-radius-full);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 1rem;
+            font-family: var(--font-style);
             text-align: center;
-            transition: var(--vc-transition);
+            transition: var(--transition);
             margin: var(--vc-space-md) auto;
             display: block;
+            background: var(--panel-color);
+            color: var(--text-dark);
         }
 
         .vc-input:focus {
             outline: none;
-            border-color: var(--vc-primary);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(214, 147, 150, 0.1);
         }
 
         /* 標籤 */
         .vc-label {
             display: block;
             text-align: center;
-            color: var(--vc-text-light);
+            color: var(--text-light);
             margin-bottom: var(--vc-space-sm);
             font-weight: 600;
         }
@@ -493,7 +512,7 @@
         }
 
         .leaderboard-table th {
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
+            background: var(--accent-color);
             color: white;
             padding: var(--vc-space-md);
             text-align: left;
@@ -501,20 +520,20 @@
         }
 
         .leaderboard-table th:first-child {
-            border-radius: var(--vc-radius-md) 0 0 0;
+            border-radius: var(--border-radius) 0 0 0;
         }
 
         .leaderboard-table th:last-child {
-            border-radius: 0 var(--vc-radius-md) 0 0;
+            border-radius: 0 var(--border-radius) 0 0;
         }
 
         .leaderboard-table td {
             padding: var(--vc-space-md);
-            border-bottom: 1px solid var(--vc-border);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .leaderboard-table tr:hover {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
         }
 
         .rank-1 { color: #ffd700; font-weight: 700; font-size: 1.2rem; }
@@ -523,20 +542,21 @@
 
         /* 答案檢視 */
         .answer-review-item {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
             padding: var(--vc-space-md);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             margin-bottom: var(--vc-space-md);
-            border-left: 4px solid var(--vc-border);
+            border-left: 4px solid var(--border-color);
+            border: 1px solid var(--border-color);
         }
 
         .answer-review-item.correct {
-            border-left-color: var(--vc-success);
+            border-left: 4px solid var(--success-color);
             background: #e8f5e9;
         }
 
         .answer-review-item.incorrect {
-            border-left-color: var(--vc-danger);
+            border-left: 4px solid var(--danger-color);
             background: #ffebee;
         }
 
@@ -569,16 +589,16 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--vc-bg);
+            background: var(--bg-canvas);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--vc-primary);
-            border-radius: var(--vc-radius-full);
+            background: var(--accent-color);
+            border-radius: var(--border-radius);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--vc-primary-dark);
+            background: var(--accent-hover);
         }
 
         .info-list {
@@ -596,27 +616,25 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: var(--vc-primary);
+            color: var(--accent-color);
             font-weight: 700;
         }
 
         .title-description-card {
-            background: linear-gradient(135deg, #fff9e6, #fffbf0);
+            background: #fff9e6;
             padding: var(--vc-space-lg);
-            border-radius: var(--vc-radius-md);
+            border-radius: var(--border-radius);
             border-left: 4px solid #ffd700;
             margin: var(--vc-space-lg) 0;
             font-style: italic;
             line-height: 1.6;
+            border: 1px solid #ffe082;
         }
 
         .final-score-display {
             font-size: 4rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--vc-primary), var(--vc-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-color);
             text-align: center;
             margin: var(--vc-space-lg) 0;
         }
@@ -662,8 +680,8 @@
         .ig-preview-image {
             width: 100%;
             max-height: 80vh;
-            border-radius: var(--vc-radius-lg);
-            box-shadow: var(--vc-shadow-lg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
             margin-bottom: var(--vc-space-lg);
         }
 
@@ -678,19 +696,25 @@
             position: absolute;
             top: var(--vc-space-lg);
             right: var(--vc-space-lg);
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            background: var(--panel-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
             width: 50px;
             height: 50px;
-            border-radius: var(--vc-radius-full);
+            border-radius: var(--border-radius);
             font-size: 1.5rem;
             cursor: pointer;
-            transition: var(--vc-transition);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
 
         .ig-close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--bg-canvas);
+            transform: translateY(-1px);
+        }
+
+        .ig-close-btn:active {
+            transform: translateY(1px);
         }
 
         @media (max-width: 768px) {
@@ -740,7 +764,7 @@
             <div class="welcome-badge">🧋☕🥤</div>
 
             <div class="vc-card">
-                <h2 style="margin-bottom: var(--vc-space-md); color: var(--vc-primary);">🎮 遊戲規則</h2>
+                <h2 style="margin-bottom: var(--vc-space-md); color: var(--accent-color);">🎮 遊戲規則</h2>
                 <ul class="info-list">
                     <li>共有 20 題關於台灣飲料連鎖店的問題（隨機順序）</li>
                     <li>每題 5 分，連擊可獲得額外加分</li>
@@ -799,7 +823,7 @@
             <div class="celebration-emoji" id="celebration"></div>
             <h2 style="text-align: center; margin-bottom: var(--vc-space-md);">🎉 挑戰結束 🎉</h2>
 
-            <p style="text-align: center; color: var(--vc-text-light); margin-bottom: var(--vc-space-sm);" id="playerNameDisplay"></p>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: var(--vc-space-sm);" id="playerNameDisplay"></p>
             <div class="final-score-display" id="finalScore">0</div>
 
             <h3 style="text-align: center; font-size: 1.8rem; margin: var(--vc-space-md) 0;" id="titleBadge"></h3>
@@ -808,20 +832,20 @@
             <div class="vc-card" style="margin: var(--vc-space-lg) 0;">
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--vc-space-md);">
                     <div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">✅ 答對</div>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-success);" id="correctCount">0</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">✅ 答對</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);" id="correctCount">0</div>
                     </div>
                     <div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">❌ 答錯</div>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-danger);" id="incorrectCount">0</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">❌ 答錯</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--danger-color);" id="incorrectCount">0</div>
                     </div>
                     <div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🔥 最高連擊</div>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-warning);" id="maxCombo">0</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">🔥 最高連擊</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: #f9a825;" id="maxCombo">0</div>
                     </div>
                     <div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🏆 排名</div>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-primary);" id="rankDisplay">-</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">🏆 排名</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-color);" id="rankDisplay">-</div>
                     </div>
                 </div>
             </div>
@@ -830,6 +854,7 @@
                 <button class="vc-btn" onclick="shareToInstagram()" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
                     📸 分享到 IG
                 </button>
+                <button class="vc-btn vc-btn-secondary" onclick="shareGameLink()">🔗 分享連結</button>
                 <button class="vc-btn vc-btn-secondary" onclick="shareResult()">📤 分享文字</button>
                 <button class="vc-btn vc-btn-secondary" onclick="showScreen('answerReviewScreen')">📝 查看答案</button>
                 <button class="vc-btn vc-btn-secondary" onclick="showScreen('achievementsScreen')">🏅 查看成就</button>
@@ -1072,7 +1097,7 @@
             setTimeout(() => {
                 gameState.currentQuestionIndex++;
                 loadQuestion();
-            }, isCorrect ? 2000 : 4000);
+            }, 2000);
         }
 
         // ==================== 顯示反饋 ====================
@@ -1306,7 +1331,7 @@
             const list = document.getElementById('historyList');
 
             if (history.length === 0) {
-                list.innerHTML = '<div class="vc-card" style="text-align: center; color: var(--vc-text-light);">還沒有遊玩記錄</div>';
+                list.innerHTML = '<div class="vc-card" style="text-align: center; color: var(--text-light);">還沒有遊玩記錄</div>';
                 return;
             }
 
@@ -1315,17 +1340,43 @@
                 <div class="history-item ${h.score === best ? 'best' : ''}">
                     <div>
                         <div style="font-weight: 700;">${h.name}</div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">${h.date}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">${h.date}</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--vc-primary);">${h.score}</div>
-                        <div style="font-size: 0.85rem; color: var(--vc-text-light);">🔥 ${h.maxCombo}</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-color);">${h.score}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">🔥 ${h.maxCombo}</div>
                     </div>
                 </div>
             `).join('');
         }
 
         // ==================== 分享功能 ====================
+        // TODO: 部署後請更新此網址
+        const GAME_URL = 'https://你的網址.com'; // 請在部署後更新此網址
+
+        function shareGameLink() {
+            const {title} = getTitleInfo(gameState.score);
+            const shareText = `🍹 飲料王挑戰 👑
+
+我獲得了「${title}」的稱號！
+分數：${gameState.score} 分
+
+快來挑戰看看你能拿多少分！
+👉 ${GAME_URL}
+
+#飲料王挑戰 #VibeCodingGames`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: '飲料王挑戰',
+                    text: shareText,
+                    url: GAME_URL
+                }).catch(() => copyToClipboard(shareText));
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
         function shareResult() {
             const {title} = getTitleInfo(gameState.score);
             let gameUrl = window.location.href;
