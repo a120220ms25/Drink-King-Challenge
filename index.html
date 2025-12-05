@@ -726,7 +726,7 @@
 </head>
 <body>
     <!-- VibeCoding 品牌 -->
-    <div class="vc-brand">VIBECODING GAMES</div>
+    <div class="vc-brand">VIBECODING GAMES BY SABRINA</div>
 
     <!-- 音效控制 -->
     <div class="vc-sound-toggle" onclick="toggleSound()" id="soundToggle" title="音效控制">
@@ -777,9 +777,9 @@
 
             <div class="btn-group">
                 <button class="vc-btn" onclick="startGame()">🚀 開始挑戰</button>
-                <button class="vc-btn vc-btn-secondary" onclick="showScreen('historyScreen')">📊 歷史記錄</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('statsScreen')">📊 統計中心</button>
+                <button class="vc-btn vc-btn-secondary" onclick="showScreen('historyScreen')">📜 歷史記錄</button>
                 <button class="vc-btn vc-btn-secondary" onclick="showScreen('achievementsScreen')">🏅 成就</button>
-                <button class="vc-btn vc-btn-secondary" onclick="showScreen('leaderboardScreen')">🏆 排行榜</button>
             </div>
         </div>
 
@@ -828,7 +828,7 @@
             <div class="title-description-card" id="titleDescription"></div>
 
             <div class="vc-card" style="margin: var(--vc-space-lg) 0;">
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--vc-space-md);">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--vc-space-md);">
                     <div>
                         <div style="font-size: 0.85rem; color: var(--text-light);">✅ 答對</div>
                         <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);" id="correctCount">0</div>
@@ -840,10 +840,6 @@
                     <div>
                         <div style="font-size: 0.85rem; color: var(--text-light);">🔥 最高連擊</div>
                         <div style="font-size: 1.5rem; font-weight: 700; color: #f9a825;" id="maxCombo">0</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.85rem; color: var(--text-light);">🏆 排名</div>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-color);" id="rankDisplay">-</div>
                     </div>
                 </div>
             </div>
@@ -887,20 +883,43 @@
             </button>
         </div>
 
-        <!-- 排行榜畫面 -->
-        <div class="screen" id="leaderboardScreen">
-            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">🏆 排行榜 TOP 10</h2>
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>排名</th>
-                        <th>玩家</th>
-                        <th>分數</th>
-                        <th>日期</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboardBody"></tbody>
-            </table>
+        <!-- 個人統計中心 -->
+        <div class="screen" id="statsScreen">
+            <h2 style="margin-bottom: var(--vc-space-lg); text-align: center;">📊 個人統計中心</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--vc-space-md); margin-bottom: var(--vc-space-lg);">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">🎮 總遊戲次數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="bestScore">0</div>
+                    <div class="stat-label">🏆 歷史最高分</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgScore">0</div>
+                    <div class="stat-label">📈 平均分數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="bestCombo">0</div>
+                    <div class="stat-label">🔥 最高連擊</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="perfectGames">0</div>
+                    <div class="stat-label">✨ 完美局數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="fastestTime">--</div>
+                    <div class="stat-label">⚡ 最快完成</div>
+                </div>
+            </div>
+
+            <div class="vc-card" style="margin-bottom: var(--vc-space-lg);">
+                <h3 style="margin-bottom: var(--vc-space-md); color: var(--accent-color); text-align: center;">📉 最近 10 局趨勢</h3>
+                <div id="trendChart" style="min-height: 200px; display: flex; align-items: flex-end; justify-content: space-around; gap: 4px;">
+                </div>
+            </div>
+
             <button class="vc-btn" onclick="goBack()" style="width: 100%; margin-top: var(--vc-space-lg);">
                 ← 返回
             </button>
@@ -974,7 +993,7 @@
             const currentScreen = document.querySelector('.screen.active')?.id || 'startScreen';
 
             // 只在非特殊頁面時記錄為 previous
-            if (!['achievementsScreen', 'historyScreen', 'leaderboardScreen', 'answerReviewScreen'].includes(currentScreen)) {
+            if (!['achievementsScreen', 'historyScreen', 'statsScreen', 'answerReviewScreen'].includes(currentScreen)) {
                 previousScreen = currentScreen;
             }
 
@@ -983,7 +1002,7 @@
 
             if (screenId === 'achievementsScreen') updateAchievementsDisplay();
             if (screenId === 'historyScreen') updateHistoryDisplay();
-            if (screenId === 'leaderboardScreen') updateLeaderboard();
+            if (screenId === 'statsScreen') updateStatsDisplay();
             if (screenId === 'answerReviewScreen') updateAnswerReview();
         }
 
@@ -1154,7 +1173,6 @@
             });
 
             checkAchievements();
-            updateLeaderboard();
 
             const {title, description, celebration} = getTitleInfo(gameState.score);
 
@@ -1166,9 +1184,6 @@
             document.getElementById('correctCount').textContent = gameState.correctCount;
             document.getElementById('incorrectCount').textContent = gameState.incorrectCount;
             document.getElementById('maxCombo').textContent = gameState.maxCombo;
-
-            const rank = getPlayerRank();
-            document.getElementById('rankDisplay').textContent = rank > 0 ? `第 ${rank} 名` : '-';
 
             if (gameState.score >= 100) launchFireworks(20);
             playSound('finish');
@@ -1332,9 +1347,6 @@
             history.push(game);
             history.sort((a, b) => b.score - a.score);
             localStorage.setItem('drinkKingHistory', JSON.stringify(history.slice(0, 100)));
-
-            // 同時更新排行榜
-            saveToLeaderboard();
         }
 
         function updateHistoryDisplay() {
@@ -1435,15 +1447,6 @@ ${gameUrl ? '\n👉 ' + gameUrl : ''}
         }
 
         // ==================== IG Story 圖片生成 ====================
-        function getTitleGradient(score) {
-            if (score >= 100) return ['#FFD700', '#FFA500']; // 金色
-            if (score >= 81) return ['#667eea', '#764ba2']; // 紫色
-            if (score >= 61) return ['#11998e', '#38ef7d']; // 青綠色
-            if (score >= 41) return ['#f093fb', '#f5576c']; // 粉橙色
-            if (score >= 21) return ['#4b6cb7', '#182848']; // 深藍色
-            return ['#bdc3c7', '#2c3e50']; // 灰色
-        }
-
         function wrapText(ctx, text, maxWidth) {
             const words = text.split('');
             let lines = [];
@@ -1464,6 +1467,20 @@ ${gameUrl ? '\n👉 ' + gameUrl : ''}
             return lines;
         }
 
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
         function generateIGStory() {
             const canvas = document.createElement('canvas');
             canvas.width = 1080;
@@ -1471,122 +1488,140 @@ ${gameUrl ? '\n👉 ' + gameUrl : ''}
             const ctx = canvas.getContext('2d');
 
             const {title, description} = getTitleInfo(gameState.score);
-            const gradient = getTitleGradient(gameState.score);
-
-            // 背景漸層
-            const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920);
-            bgGradient.addColorStop(0, gradient[0]);
-            bgGradient.addColorStop(1, gradient[1]);
-            ctx.fillStyle = bgGradient;
-            ctx.fillRect(0, 0, 1080, 1920);
-
-            // 半透明覆蓋層（讓文字更清晰）
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(0, 0, 1080, 1920);
-
-            // 頂部品牌
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.font = 'bold 36px -apple-system, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('VIBECODING GAMES', 540, 80);
-
-            // 遊戲標題
-            ctx.font = 'bold 56px -apple-system, sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🍹 飲料王挑戰 👑', 540, 160);
-
-            // 頭銜 emoji（超大）
-            ctx.font = '200px Arial';
-            ctx.textAlign = 'center';
             const titleEmoji = title.split(' ')[0];
-            ctx.fillText(titleEmoji, 540, 420);
-
-            // 頭銜文字
-            ctx.font = 'bold 80px -apple-system, sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 4;
             const titleText = title.substring(title.indexOf(' ') + 1);
-            ctx.fillText(titleText, 540, 540);
-            ctx.shadowBlur = 0;
 
-            // 分數（超大顯示）
-            ctx.font = 'bold 180px -apple-system, sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.fillText(gameState.score, 540, 750);
+            // 背景 - 品牌灰色
+            ctx.fillStyle = '#DFDFDF';
+            ctx.fillRect(0, 0, 1080, 1920);
 
-            ctx.font = 'bold 48px -apple-system, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.fillText('分', 540, 820);
-
-            // 玩家名字
-            ctx.font = 'bold 44px -apple-system, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-            ctx.fillText(`玩家：${gameState.playerName}`, 540, 920);
-
-            // 分隔線
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(140, 980);
-            ctx.lineTo(940, 980);
-            ctx.stroke();
-
-            // 統計數據區
-            ctx.font = 'bold 40px -apple-system, sans-serif';
-            ctx.fillStyle = 'white';
-
-            // 答對
-            ctx.fillText('✅', 240, 1080);
-            ctx.font = '32px -apple-system, sans-serif';
-            ctx.fillText('答對', 240, 1130);
-            ctx.font = 'bold 56px -apple-system, sans-serif';
-            ctx.fillText(gameState.correctCount, 240, 1200);
-
-            // 答錯
-            ctx.fillText('❌', 540, 1080);
-            ctx.font = '32px -apple-system, sans-serif';
-            ctx.fillText('答錯', 540, 1130);
-            ctx.font = 'bold 56px -apple-system, sans-serif';
-            ctx.fillText(gameState.incorrectCount, 540, 1200);
-
-            // 連擊
-            ctx.fillText('🔥', 840, 1080);
-            ctx.font = '32px -apple-system, sans-serif';
-            ctx.fillText('連擊', 840, 1130);
-            ctx.font = 'bold 56px -apple-system, sans-serif';
-            ctx.fillText(gameState.maxCombo, 840, 1200);
-
-            // 分隔線
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(140, 1260);
-            ctx.lineTo(940, 1260);
-            ctx.stroke();
-
-            // 頭銜描述（多行文字）
-            ctx.font = '36px -apple-system, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            // 顶部品牌标志
+            ctx.fillStyle = '#666666';
+            ctx.font = '600 28px Inter, sans-serif';
             ctx.textAlign = 'center';
-            const descLines = wrapText(ctx, description, 900);
-            let descY = 1350;
-            descLines.forEach((line, i) => {
-                ctx.fillText(line, 540, descY + (i * 50));
+            ctx.fillText('VIBECODING GAMES BY SABRINA', 540, 80);
+
+            // 主卡片 - 白色面板
+            const cardY = 150;
+            const cardHeight = 1600;
+            const cardPadding = 60;
+
+            // 卡片阴影
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.12)';
+            ctx.shadowBlur = 40;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 8;
+
+            // 绘制主卡片
+            ctx.fillStyle = '#FFFFFF';
+            roundRect(ctx, cardPadding, cardY, 1080 - cardPadding * 2, cardHeight, 24);
+            ctx.fill();
+
+            // 重置阴影
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+
+            // 游戏标题
+            ctx.fillStyle = '#333333';
+            ctx.font = '800 52px Inter, sans-serif';
+            ctx.fillText('飲料王挑戰', 540, cardY + 90);
+
+            // 头衔 emoji
+            ctx.font = '180px Arial';
+            ctx.fillText(titleEmoji, 540, cardY + 310);
+
+            // 头衔文字 - 品牌色
+            ctx.fillStyle = '#D69396';
+            ctx.font = '700 64px Inter, sans-serif';
+            ctx.fillText(titleText, 540, cardY + 420);
+
+            // 分数大显示
+            ctx.fillStyle = '#333333';
+            ctx.font = '800 160px Inter, sans-serif';
+            ctx.fillText(gameState.score, 540, cardY + 620);
+
+            ctx.font = '600 40px Inter, sans-serif';
+            ctx.fillStyle = '#666666';
+            ctx.fillText('分', 540, cardY + 680);
+
+            // 玩家名字 - 小卡片
+            const nameCardY = cardY + 750;
+            ctx.fillStyle = '#DFDFDF';
+            roundRect(ctx, 240, nameCardY, 600, 80, 12);
+            ctx.fill();
+
+            ctx.fillStyle = '#333333';
+            ctx.font = '600 36px Inter, sans-serif';
+            ctx.fillText(gameState.playerName, 540, nameCardY + 52);
+
+            // 统计数据区 - 三个小卡片
+            const statsY = nameCardY + 140;
+            const statWidth = 280;
+            const statHeight = 180;
+            const statGap = 30;
+            const startX = (1080 - statWidth * 3 - statGap * 2) / 2;
+
+            // 统计数据数组
+            const stats = [
+                { emoji: '✅', label: '答對', value: gameState.correctCount, color: '#8BC34A' },
+                { emoji: '❌', label: '答錯', value: gameState.incorrectCount, color: '#E57373' },
+                { emoji: '🔥', label: '連擊', value: gameState.maxCombo, color: '#FFA726' }
+            ];
+
+            stats.forEach((stat, i) => {
+                const x = startX + i * (statWidth + statGap);
+
+                // 小卡片背景
+                ctx.fillStyle = '#F5F5F5';
+                roundRect(ctx, x, statsY, statWidth, statHeight, 12);
+                ctx.fill();
+
+                // Emoji
+                ctx.font = '56px Arial';
+                ctx.fillText(stat.emoji, x + statWidth / 2, statsY + 65);
+
+                // 数值 - 使用对应颜色
+                ctx.fillStyle = stat.color;
+                ctx.font = '800 60px Inter, sans-serif';
+                ctx.fillText(stat.value, x + statWidth / 2, statsY + 135);
+
+                // 标签
+                ctx.fillStyle = '#666666';
+                ctx.font = '600 24px Inter, sans-serif';
+                ctx.fillText(stat.label, x + statWidth / 2, statsY + 168);
             });
 
-            // 底部呼籲文字
-            const bottomY = 1700;
-            ctx.font = 'bold 48px -apple-system, sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🧋 你也來挑戰看看吧！', 540, bottomY);
+            // 描述卡片
+            const descY = statsY + 230;
+            ctx.fillStyle = '#FFF9E6';
+            roundRect(ctx, 140, descY, 800, 200, 12);
+            ctx.fill();
 
-            // 底部標籤
-            ctx.font = 'bold 36px -apple-system, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillText('#飲料王挑戰 #VibeCodingGames', 540, bottomY + 80);
+            // 描述文字
+            ctx.fillStyle = '#666666';
+            ctx.font = '28px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            const descLines = wrapText(ctx, description, 720);
+            descLines.forEach((line, i) => {
+                ctx.fillText(line, 540, descY + 50 + (i * 45));
+            });
+
+            // 底部呼吁 - 品牌色背景
+            const ctaY = descY + 260;
+            ctx.fillStyle = '#D69396';
+            roundRect(ctx, 140, ctaY, 800, 100, 12);
+            ctx.fill();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '700 40px Inter, sans-serif';
+            ctx.fillText('🧋 來挑戰看看吧！', 540, ctaY + 62);
+
+            // 底部标签
+            ctx.fillStyle = '#999999';
+            ctx.font = '600 28px Inter, sans-serif';
+            ctx.fillText('#飲料王挑戰 #VibeCodingGames', 540, ctaY + 150);
 
             return canvas;
         }
@@ -1639,55 +1674,82 @@ ${gameUrl ? '\n👉 ' + gameUrl : ''}
             alert('✅ 圖片已下載到您的裝置！\n\n手機用戶也可以長按圖片直接儲存喔～');
         }
 
-        // ==================== 排行榜 ====================
-        function saveToLeaderboard() {
-            const leaderboard = getLeaderboard();
-            leaderboard.push({
-                name: gameState.playerName,
-                score: gameState.score,
-                date: new Date().toLocaleDateString('zh-TW'),
-                timestamp: Date.now()
-            });
-            leaderboard.sort((a, b) => b.score - a.score);
-            localStorage.setItem('drinkKingLeaderboard', JSON.stringify(leaderboard.slice(0, 100)));
-        }
+        // ==================== 個人統計中心 ====================
+        function updateStatsDisplay() {
+            const history = loadHistory();
 
-        function getLeaderboard() {
-            const saved = localStorage.getItem('drinkKingLeaderboard');
-            return saved ? JSON.parse(saved) : [];
-        }
-
-        function getPlayerRank() {
-            const leaderboard = getLeaderboard();
-            return leaderboard.findIndex(e => e.name === gameState.playerName && e.score === gameState.score) + 1;
-        }
-
-        function updateLeaderboard() {
-            const leaderboard = getLeaderboard();
-            const tbody = document.getElementById('leaderboardBody');
-            const top10 = leaderboard.slice(0, 10);
-
-            if (top10.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">還沒有記錄</td></tr>';
+            if (history.length === 0) {
+                document.getElementById('totalGames').textContent = '0';
+                document.getElementById('bestScore').textContent = '0';
+                document.getElementById('avgScore').textContent = '0';
+                document.getElementById('bestCombo').textContent = '0';
+                document.getElementById('perfectGames').textContent = '0';
+                document.getElementById('fastestTime').textContent = '--';
+                document.getElementById('trendChart').innerHTML = '<div style="text-align: center; color: var(--text-light); padding: var(--vc-space-xl);">還沒有遊戲記錄</div>';
                 return;
             }
 
-            tbody.innerHTML = top10.map((entry, i) => {
-                let rankDisplay = i + 1;
-                let rankClass = '';
-                let prefix = '';
+            // 總遊戲次數
+            document.getElementById('totalGames').textContent = history.length;
 
-                if (i === 0) { rankDisplay = '🥇'; rankClass = 'rank-1'; prefix = '👑 '; }
-                else if (i === 1) { rankDisplay = '🥈'; rankClass = 'rank-2'; prefix = '⭐ '; }
-                else if (i === 2) { rankDisplay = '🥉'; rankClass = 'rank-3'; prefix = '✨ '; }
+            // 歷史最高分
+            const bestScore = Math.max(...history.map(h => h.score));
+            document.getElementById('bestScore').textContent = bestScore;
 
-                return `<tr>
-                    <td class="${rankClass}">${rankDisplay}</td>
-                    <td>${prefix}${entry.name}</td>
-                    <td><strong>${entry.score}</strong> 分</td>
-                    <td>${entry.date}</td>
-                </tr>`;
+            // 平均分數
+            const avgScore = Math.round(history.reduce((sum, h) => sum + h.score, 0) / history.length);
+            document.getElementById('avgScore').textContent = avgScore;
+
+            // 最高連擊
+            const bestCombo = Math.max(...history.map(h => h.maxCombo || 0));
+            document.getElementById('bestCombo').textContent = bestCombo;
+
+            // 完美局數 (100分以上)
+            const perfectGames = history.filter(h => h.score >= 100).length;
+            document.getElementById('perfectGames').textContent = perfectGames;
+
+            // 最快完成時間
+            const fastestGame = history.reduce((fastest, h) => {
+                if (!h.totalTime) return fastest;
+                if (!fastest || h.totalTime < fastest.totalTime) return h;
+                return fastest;
+            }, null);
+
+            if (fastestGame && fastestGame.totalTime) {
+                const minutes = Math.floor(fastestGame.totalTime / 60);
+                const seconds = Math.floor(fastestGame.totalTime % 60);
+                document.getElementById('fastestTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                document.getElementById('fastestTime').textContent = '--';
+            }
+
+            // 繪製趨勢圖（最近10局）
+            const recent10 = history.slice(-10);
+            const maxScoreInRecent = Math.max(...recent10.map(h => h.score), 100);
+
+            const chartHTML = recent10.map((h, i) => {
+                const heightPercent = (h.score / maxScoreInRecent) * 100;
+                const color = h.score >= 100 ? 'var(--accent-color)' :
+                              h.score >= 80 ? '#7CB342' :
+                              h.score >= 60 ? '#FFA726' : 'var(--text-light)';
+
+                return `
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                        <div style="font-size: 0.75rem; color: var(--text-light); font-weight: 600;">${h.score}</div>
+                        <div style="
+                            width: 100%;
+                            height: ${heightPercent}%;
+                            max-height: 150px;
+                            background: ${color};
+                            border-radius: var(--border-radius) var(--border-radius) 0 0;
+                            transition: var(--transition);
+                        "></div>
+                        <div style="font-size: 0.7rem; color: var(--text-light);">${i + 1}</div>
+                    </div>
+                `;
             }).join('');
+
+            document.getElementById('trendChart').innerHTML = chartHTML;
         }
 
         // ==================== 答案檢視 ====================
